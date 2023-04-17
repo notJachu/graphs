@@ -1,16 +1,79 @@
-# This is a sample Python script.
+import queue
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+with open('./labirynt.txt') as plik:
+    maze = plik.readlines()
+    for a in range(20):
+        maze[a] = list(maze[a].rstrip('\n'))
+
+    visited = [[False] * 20] * 20
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def getMoves(x, y):
+    moves = []
+    for i in range(-1, 1):
+        if x + i >= 0 and y - 1 >= 0:
+            #print(i)
+            if maze[x + i][y - 1] != '#' and not visited[x + i][y - 1]:
+                tmp = [x + i, y - 1]
+                # print(i)
+                moves.append(tmp)
+
+    for i in range(-1, 1):
+        if x + i >= 0 and y + 1 <= 20:
+            #print(i)
+            if maze[x + i][y + 1] != '#' and not visited[x + i][y + 1]:
+                tmp = [x + i, y + 1]
+                # print(i)
+                moves.append(tmp)
+
+    if x - 1 >= 0:
+        if maze[x - 1][y] != '#' and not visited[x - 1][y]:
+            tmp = [x - 1, y]
+            moves.append(tmp)
+
+    if x + 1 >= 0:
+        if maze[x + 1][y] != '#' and not visited[x + 1][y]:
+            tmp = [x + 1, y]
+            moves.append(tmp)
+
+    #print(moves)
+    return moves
 
 
-# Press the green button in the gutter to run the script.
+def solve(sx, sy, gx, gy):
+    q = queue.Queue()
+    q.put([sx, sy])
+
+    newPath = []
+
+    while q.qsize() > 0:
+
+        newPath.append(q.get())
+        path = newPath
+
+        print(path)
+        sx = path[len(path) - 1][0]
+        sy = path[len(path) - 1][1]
+        if sx == gx and sy == gy:
+            return path
+        moves = getMoves(sx, sy)
+        visited[sx][sy] = True
+        for m in moves:
+            #print(m)
+            newPath.append(m)
+            print(newPath)
+            print(q.put(newPath))
+            print(newPath)
+
+
+        #    q.put(newPath)
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    for a in maze:
+        print(a)
+    for a in visited:
+        print(a)
+    print(maze[0][6])
+    solve(0, 0, 20, 20)
+    # print(visited)
