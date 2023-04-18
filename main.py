@@ -83,6 +83,10 @@ if __name__ == '__main__':
     for a in visited:
         print(a)
     print(maze[0][6])
-    solve(0, 0, 20, 20)
+    path = solve(0, 0, 20, 20)
+    for c in path:
+        maze[c[0]][c[1]] = '*'
     #getMoves(0, 1)
     # print(visited)
+    for a in maze:
+        print(a)
